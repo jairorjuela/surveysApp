@@ -8,7 +8,7 @@ RSpec.describe Survey, type: :model do
   end
 
   describe "The survey values are valid" do
-    it "Should create the user" do
+    it "Should create the survey" do
       subject.name = "Soy un test"
       subject.user = user
 
@@ -18,7 +18,7 @@ RSpec.describe Survey, type: :model do
 
   describe "The survey values are not valid" do
     describe "the user not exist" do
-      it "Should not create the user" do
+      it "Should not create the survey" do
         subject.name = "test"
 
         expect(subject).to be_invalid

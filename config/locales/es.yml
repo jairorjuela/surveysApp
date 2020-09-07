@@ -19,3 +19,23 @@ es:
           attributes:
             user:
               required: "Debe registrarse o ingresar a la plataforma"
+        question:
+          attributes:
+            survey:
+              required: "Debe existir una encuesta"
+        option:
+          attributes:
+            question:
+              required: "Debe existir una pregunta"
+        application:
+          attributes:
+            survey:
+              required: "Debe existir una encuesta"
+        answer:
+          attributes:
+            question:
+              required: "Debe existir una pregunta"
+            option:
+              required: "Debe existir una opción"
+            application:
+              required: "Debe aplicar a una encuesta"

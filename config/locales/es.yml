@@ -1,0 +1,21 @@
+es:
+  devise:
+    failure:
+      user:
+        unauthenticated: "Debe registrarse o iniciar sesión"
+
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              invalid: "El email es inválido"
+              blank: "El email no puede estar vacio"
+            password:
+              too_short: "La contraseña es muy corta, el mínimo son 6 caracteres"
+              blank: "El campo de la contraseña no puede estar vacio"
+        survey:
+          attributes:
+            user:
+              required: "Debe registrarse o ingresar a la plataforma"

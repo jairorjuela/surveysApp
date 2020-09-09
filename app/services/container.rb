@@ -19,6 +19,14 @@ class Container
       register("find_options")      { Surveys::Show::FindOptions.new }
       register("build_response")    { Surveys::Show::BuildResponse.new }
     end
+
+    namespace "destroy" do
+      register("validate")          { Surveys::Show::Validate.new }
+      register("find_survey")       { Surveys::Show::FindSurvey.new }
+      register("find_questions")    { Surveys::Show::FindQuestions.new }
+      register("find_options")      { Surveys::Show::FindOptions.new }
+      register("destroy_all")       { Surveys::Destroy::DestroyAll.new }
+    end
   end
 
   namespace "questions" do

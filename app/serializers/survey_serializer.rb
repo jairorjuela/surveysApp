@@ -1,9 +1,5 @@
 class SurveySerializer < ActiveModel::Serializer
-  attributes :name, :all_information
+  attributes :name, :id
 
   belongs_to :user
-
-  def all_information
-    object.all_questions
-  end
 end

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::SurveysController, :type => :request do
-  let(:user)      { create(:user) }
-  #let(:header) { { 'Authorization' => JsonWebToken.encode({ user_id: user.id }), 'HTTP_ACCEPT' => "application/json" } }
+  let(:user)      { create(:user, email: "test@mail.com") }
+  let(:header) { { 'Authorization' => JsonWebToken.encode({ user_id: user.id }), 'HTTP_ACCEPT' => "application/json" } }
 
   describe "GET/surveys" do
     context "All surveys are public" do
@@ -24,16 +24,25 @@ RSpec.describe Api::V1::SurveysController, :type => :request do
     context "One survey are public" do
       it "Should return the survey" do
         survey = create(:survey, name: "test")
-        params = { survey: { name: "test" } }
+        question = create(:question, survey: survey)
 
-        get "/api/v1/surveys/survey", params: params
+        get "/api/v1/surveys/#{survey.id}"
 
         body = JSON.parse(response.body)
 
         expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
-        expect(response.status).to eq(200)
+        expect(response.status).to eq(201)
 
-        expected_response = {"name"=>"test", "user"=>{"email"=>"batman@justiceleague.com"}}
+        expected_response = {
+          "title"=>"test",
+          "questions"=>[
+            {"name"=>"Soy una pregunta",
+              "options"=>true
+            }
+          ],
+          "owner"=>"batman@justiceleague.com"
+        }
+
         expect(body).to eq(expected_response)
       end
     end
@@ -43,7 +52,20 @@ RSpec.describe Api::V1::SurveysController, :type => :request do
     context "Create a new survey" do
       it "Should return the new survey" do
         sign_in user
-        params = { survey: { name: "New new test" } }
+        params = {
+          title: "New survey",
+          questions: [
+            {
+              name: "Question one",
+              options: ["option one", "option two"]
+            },
+            {
+              name: "Question tow",
+              options: ["yes", "No"]
+            }
+          ],
+          owner: "test@mail.com"
+        }
 
         post "/api/v1/surveys", params: params
 
@@ -52,8 +74,8 @@ RSpec.describe Api::V1::SurveysController, :type => :request do
         expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
         expect(response.status).to eq(201)
 
-        expected_response = {"name"=>"New new test", "user"=>{"email"=>"batman@justiceleague.com"}}
-        expect(body).to eq(expected_response)
+        expected_response = ["title", "owner", "questions", "user", "survey", "created_questions", "created_options"]
+        expect(body.keys).to eq(expected_response)
       end
     end
 
@@ -83,7 +105,7 @@ RSpec.describe Api::V1::SurveysController, :type => :request do
         expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
         expect(response.status).to eq(401)
 
-        expected_response = {"error"=>"El registro no pudo ser creado"}
+        expected_response = {"owner"=>["is missing"], "questions"=>["must be filled"], "title"=>["is missing"]}
         expect(body).to eq(expected_response)
       end
     end

@@ -1,12 +1,12 @@
 module Api
   module V1
     class SurveysController < ApplicationController
-      before_action :set_survey, only: [:show, :update, :destroy]
+      #before_action :set_survey, only: [:show, :update, :destroy]
       before_action :authenticate_user!, only: [:create, :update, :destroy]
 
       def index
         @surveys = Survey.all
-        render json: @surveys
+        render json: @surveys, each_serializer: SurveySerializer
       end
 
       def show
@@ -18,12 +18,12 @@ module Api
       end
 
       def create
-        survey = Survey.new(survey_params)
+        response = Surveys::Create::Do.new.(survey_params)
 
-        if survey.save
-          render json: survey, status: 201
+        if response.success?
+          render json:  response.success , status: 201, each_serializer: SurveyShowSerializer
         else
-          render json: { error: "El registro no pudo ser creado" }, status: 401
+          render json:  response.failure , status: 401
         end
       end
 
@@ -50,12 +50,13 @@ module Api
 
       private
       def survey_params
-        params.require(:survey).permit(:name).merge(user: current_user)
+        #params.require(:survey).permit(:name).merge(user: current_user).to_h.symbolize_keys
+        params.permit(:title, :owner).to_h.symbolize_keys.merge(questions:params[:questions])
       end
 
-      def set_survey
-        @survey = Survey.find_by(name: survey_params[:name])
-      end
+      #def set_survey
+      #  @survey = Survey.find_by(name: survey_params[:name])
+      #end
 
       def authorized?
         @survey.user.eql?(current_user)

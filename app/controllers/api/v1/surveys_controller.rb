@@ -10,10 +10,12 @@ module Api
       end
 
       def show
-        if @survey.present?
-          render json: @survey
+        response = Surveys::Show::Do.new.(show_params)
+
+        if response.success?
+          render json:  response.success, status: 201
         else
-          render json: { error: "El registro no existe" }, status: 401
+          render json:  response.failure, status: 401
         end
       end
 
@@ -21,21 +23,28 @@ module Api
         response = Surveys::Create::Do.new.(survey_params)
 
         if response.success?
-          render json:  response.success , status: 201, each_serializer: SurveyShowSerializer
+          render json:  response.success, status: 201, each_serializer: SurveyShowSerializer
         else
-          render json:  response.failure , status: 401
+          render json:  response.failure, status: 401
         end
       end
 
       def update
-        if authorized?
-          if @survey.update(survey_params)
-            render json: @survey, status: 201
-          else
-            render json: { error: "El registro no pudo ser actualizado" }, status: 401
-          end
+        #if authorized?
+        #  if @survey.update(survey_params)
+        #    render json: @survey, status: 201
+        #  else
+        #    render json: { error: "El registro no pudo ser actualizado" }, status: 401
+        #  end
+        #else
+        #  render json: { error: "No tiene permisos" }, status: 403
+        #end
+        response = Surveys::Update::Do.new.(survay_params)
+
+        if response.success?
+          render json:  response.success, status: 201, each_serializer: SurveyShowSerializer
         else
-          render json: { error: "No tiene permisos" }, status: 403
+          render json:  response.failure, status: 401
         end
       end
 
@@ -49,6 +58,10 @@ module Api
       end
 
       private
+      def show_params
+        params.permit(:id).to_h.symbolize_keys
+      end
+
       def survey_params
         #params.require(:survey).permit(:name).merge(user: current_user).to_h.symbolize_keys
         params.permit(:title, :owner).to_h.symbolize_keys.merge(questions:params[:questions])

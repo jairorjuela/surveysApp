@@ -11,6 +11,14 @@ class Container
       register("get_user")        { Surveys::Create::GetUser.new }
       register("create_survey")   { Surveys::Create::CreateSurvey.new }
     end
+
+    namespace "show" do
+      register("validate")          { Surveys::Show::Validate.new }
+      register("find_survey")       { Surveys::Show::FindSurvey.new }
+      register("find_questions")    { Surveys::Show::FindQuestions.new }
+      register("find_options")      { Surveys::Show::FindOptions.new }
+      register("build_response")    { Surveys::Show::BuildResponse.new }
+    end
   end
 
   namespace "questions" do

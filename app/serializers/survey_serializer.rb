@@ -1,5 +1,5 @@
 class SurveySerializer < ActiveModel::Serializer
-  attributes :name
+  attributes :name, :id
 
   belongs_to :user
 end

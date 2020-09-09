@@ -20,24 +20,33 @@ RSpec.describe Api::V1::SurveysController, :type => :request do
     end
   end
 
-  #describe "GET/surveys/survey" do
-  #  context "One survey are public" do
-  #    it "Should return the survey" do
-  #      survey = create(:survey, name: "test")
-  #      params = { survey: { name: "test" } }
+  describe "GET/surveys/survey" do
+    context "One survey are public" do
+      it "Should return the survey" do
+        survey = create(:survey, name: "test")
+        question = create(:question, survey: survey)
 
-  #      get "/api/v1/surveys/survey", params: params
+        get "/api/v1/surveys/#{survey.id}"
 
-  #      body = JSON.parse(response.body)
+        body = JSON.parse(response.body)
 
-  #      expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
-  #      expect(response.status).to eq(200)
+        expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
+        expect(response.status).to eq(201)
 
-  #      expected_response = {"name"=>"test", "user"=>{"email"=>"batman@justiceleague.com"}}
-  #      expect(body).to eq(expected_response)
-  #    end
-  #  end
-  #end
+        expected_response = {
+          "title"=>"test",
+          "questions"=>[
+            {"name"=>"Soy una pregunta",
+              "options"=>true
+            }
+          ],
+          "owner"=>"batman@justiceleague.com"
+        }
+
+        expect(body).to eq(expected_response)
+      end
+    end
+  end
 
   describe "POST/surveys" do
     context "Create a new survey" do

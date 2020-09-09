@@ -110,4 +110,25 @@ RSpec.describe Api::V1::SurveysController, :type => :request do
       end
     end
   end
+
+  describe "DELETE/surveys" do
+    context "Delete a survey" do
+      it "Should return message success when delete the survey" do
+        sign_in user
+        survey = create(:survey, name: "test")
+        question = create(:question, survey: survey)
+        options = create(:option, question: question)
+
+        delete "/api/v1/surveys/#{survey.id}"
+
+        body = JSON.parse(response.body)
+
+        expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
+        expect(response.status).to eq(201)
+
+        expected_response = {"message"=>"Se eliminó la encuesta"}
+        expect(body).to eq(expected_response)
+      end
+    end
+  end
 end

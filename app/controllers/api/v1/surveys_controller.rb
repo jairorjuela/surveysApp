@@ -1,7 +1,6 @@
 module Api
   module V1
     class SurveysController < ApplicationController
-      #before_action :set_survey, only: [:show, :update, :destroy]
       before_action :authenticate_user!, only: [:create, :update, :destroy]
 
       def index
@@ -29,31 +28,13 @@ module Api
         end
       end
 
-      def update
-        #if authorized?
-        #  if @survey.update(survey_params)
-        #    render json: @survey, status: 201
-        #  else
-        #    render json: { error: "El registro no pudo ser actualizado" }, status: 401
-        #  end
-        #else
-        #  render json: { error: "No tiene permisos" }, status: 403
-        #end
-        response = Surveys::Update::Do.new.(survay_params)
+      def destroy
+        response = Surveys::Destroy::Do.new.(show_params)
 
         if response.success?
-          render json:  response.success, status: 201, each_serializer: SurveyShowSerializer
+          render json:  response.success, status: 201
         else
           render json:  response.failure, status: 401
-        end
-      end
-
-      def destroy
-        if authorized?
-          @survey.destroy
-          render json: @surveys, status: 201
-        else
-          render json: { error: "No tiene permisos" }, status: 403
         end
       end
 
@@ -63,16 +44,7 @@ module Api
       end
 
       def survey_params
-        #params.require(:survey).permit(:name).merge(user: current_user).to_h.symbolize_keys
         params.permit(:title, :owner).to_h.symbolize_keys.merge(questions:params[:questions])
-      end
-
-      #def set_survey
-      #  @survey = Survey.find_by(name: survey_params[:name])
-      #end
-
-      def authorized?
-        @survey.user.eql?(current_user)
       end
     end
   end

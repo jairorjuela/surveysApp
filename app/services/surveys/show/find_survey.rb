@@ -5,7 +5,7 @@ class Surveys::Show::FindSurvey
   include Dry::Transaction
 
   def call(input)
-    survey = Survey.find(input[:id].to_i)
+    survey = Survey.find_by(id: input[:id].to_i)
 
     if survey.present?
       Success input.merge(survey: survey)

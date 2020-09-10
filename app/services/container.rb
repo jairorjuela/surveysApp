@@ -42,4 +42,12 @@ class Container
       register("create_option")     { Options::Create::CreateOption.new }
     end
   end
+
+  namespace "applications" do
+    namespace "create" do
+      register("validate")            { Applications::Create::Validate.new }
+      register("create_application")  { Applications::Create::CreateApplication.new }
+      register("create_answers")      { Applications::Create::CreateAnswers.new }
+    end
+  end
 end

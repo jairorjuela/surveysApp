@@ -33,7 +33,7 @@ class Surveys::Show::BuildResponse
   end
 
   def get_options(options, question)
-    !if(options.flatten.eql?(String))
+    unless(options.flatten.eql?(String))
       response = options.flatten.each_with_object([]) do |option, array|
         option.question_id.eql?(question) ? array << option.name : array
       end

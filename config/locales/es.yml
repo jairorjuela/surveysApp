@@ -1,8 +1,16 @@
 es:
   devise:
+    registrations:
+      user:
+        signed_up: "Su cuenta se ha creado!"
+    sessions:
+      user:
+        signed_out: "Se ha cerrado sesión"
+        signed_in: "Se ha iniciado sesión"
     failure:
       user:
         unauthenticated: "Debe registrarse o iniciar sesión"
+        not_found_in_database: "Usuario o contraseña incorrectos"
 
   activerecord:
     errors:

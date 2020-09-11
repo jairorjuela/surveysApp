@@ -1,14 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { Switch, Route, Link } from 'react-router-dom';
+import Home from './Home'
 
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-        Hello world!
-        <button type="button" className="btn btn-primary">Primary</button>
-      </div>
-    )
-  }
+export default function App() {
+  return (
+    <main>
+      <Switch>
+        <Route path="/" component={Home} exact />
+      </Switch>
+    </main>
+  );
 }
-
-export default App

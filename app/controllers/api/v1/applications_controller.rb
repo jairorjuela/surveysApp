@@ -11,7 +11,21 @@ module Api
         end
       end
 
+      def show
+        response = Surveys::Show::Do.new.(show_params)
+
+        if response.success?
+          render json:  response.success, status: 201
+        else
+          render json:  response.failure, status: 401
+        end
+      end
+
       private
+      def show_params
+        params.permit(:id).to_h.symbolize_keys
+      end
+
       def applications_params
         params.permit(:id, :date_apply, :owner).to_h.symbolize_keys.merge(answers: params[:answers])
       end

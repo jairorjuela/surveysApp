@@ -15,12 +15,12 @@ RSpec.describe Applications::Create::Do do
       id: survey.id.to_s,
       answers: [
         {
-          question: "Soy una pregunta",
-          answer: ["Si"]
+          name: "Soy una pregunta",
+          options: ["Si"]
         },
         {
-          question: "Soy otra pregunta",
-          answer: ["Tal vez"]
+          name: "Soy otra pregunta",
+          options: ["Tal vez"]
         }
       ],
       owner: user.email,

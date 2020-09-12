@@ -23,7 +23,7 @@ export default function Application(props) {
 
   if (load) {
     return (
-      <Answers error={error} survey={survey} />
+      <Answers error={error} survey={survey} surveyId={props.surveyToFill.surveyId} />
     );
   } else {
     return (

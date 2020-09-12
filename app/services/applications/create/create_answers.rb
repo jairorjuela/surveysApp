@@ -19,7 +19,7 @@ class Applications::Create::CreateAnswers
     ids = get_all_ids(answers, questions, options)
 
     answers = ids.each_with_object([]) do |id, array|
-      answ = Answer.new(application: application, question: id[:question].first, option: id[:answer].first)
+      answ = Answer.new(application: application, question: id[:name].first, option: id[:options].first)
 
       answ.save ? array << answ : array << "No se pudo crear la respuesta"
     end
@@ -32,16 +32,16 @@ class Applications::Create::CreateAnswers
 
   def get_ids_questions(answers, questions)
     ids = answers.each_with_object([]) do |answer, array|
-      ques = questions.select{|question| question.name.eql?(answer[:question]) }
-      answer[:question] = ques
+      ques = questions.select{|question| question.name.eql?(answer[:name]) }
+      answer[:name] = ques
       array << answer
     end
   end
 
   def get_ids_options(answers, options)
     ids = answers.each_with_object([]) do |answer, array|
-      opts = options.flatten.select{|option| option.name.eql?(answer[:answer].first) }
-      answer[:answer] = opts
+      opts = options.flatten.select{|option| option.name.eql?(answer[:options].first) }
+      answer[:options] = opts
       array << answer
     end
   end

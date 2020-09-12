@@ -1,6 +1,7 @@
 module Api
   module V1
     class ApplicationsController < ApplicationController
+
       def create
         response = Applications::Create::Do.new.(applications_params)
 

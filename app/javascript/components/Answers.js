@@ -1,47 +1,85 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import axios from 'axios'
+import Select from "react-select";
+import FormAnswer from "./FormAnswer";
 
 export default function Answers(props) {
- const [apply, setApply] = useState({});
+  const history = useHistory();
+  const [load, setLoad] = useState(false);
+  const [send, setSend] = useState(false);
+  const [error, setError] = useState('');
+  const testAnswers = props.survey.questions
+  const [apply, setApply] = useState({ id: String(props.surveyId), owner: props.survey.owner})
 
- return (
-   <div>
-     { props.error
-       ? ( <h1>Ocurrió un errror, intente de nuevo</h1> )
-       : ( <section> 
-             <h1>Encuesta: {props.survey.title}</h1>
-             <h5>Propietario: {props.survey.owner}</h5>
-             <hr />
-             <h3>Preguntas: </h3>
-             <ShowQuestions value={props.survey.questions} />
-         </section>)
-     }
-   </div>
- );
-}
+  const updateAnswers = (option) => {
+  console.log("update")
+    let selectedOptions = testAnswers
 
-function ShowQuestions(props) {
-  return (
-    props.value.map(
-      (question, index) =>
-        <div key={index}>
-        <h4>{question.name}</h4>
-        <ShowOptions value={question.options} />
-        </div>
+    selectedOptions.forEach(function(element) {
+      let getValue = option[`${element.name}`]
+
+      if(element.name === getKeyByValue(option, getValue)){
+        element.options = [ getValue ]
+      }
+    })
+
+    let dateApply = new Date().valueOf()
+
+    setApply({...apply, answers: selectedOptions, date_apply: String(dateApply) })
+    setSend(true)
+  }
+
+  function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
+
+  useEffect(() => {
+    if(send){
+      axios.post("/api/v1/applications", apply)
+        .then(response => {
+          setLoad(true)
+        })
+        .catch(error => {
+        console.log("error apply", error)
+          setError(error.message)
+          setLoad(true)
+        });
+    }
+  }, [send])
+
+   if(send) {
+    return (
+      <div>
+        <h1>Se envió la respuesta</h1>
+        <button
+          type="button"
+          className="btn btn-outline-primary"
+          onClick={() => history.push('/')}
+        >
+          Ir al Inicio
+        </button>
+      </div>
+    );
+   } else {
+     return (
+       <div>
+         { props.error
+           ? ( <div>
+               <h1>Ocurrió un error, intente de nuevo</h1>
+               <button
+                 type="button"
+                 className="btn btn-outline-primary"
+                 onClick={() => history.push('/')}
+               >
+                 Ir al Inicio
+               </button>
+             </div> )
+           : ( <div className="col px-md-5">
+               <FormAnswer updateOption={updateAnswers} formAnswers={props.survey}/>
+             </div>)
+         }
+       </div>
     )
-  );
-}
-
-function ShowOptions(props) {
-  return (
-    props.value.map(
-      (option, index) =>
-        <div className="form-check" key={index}>
-          <input className="form-check-input" type="radio" name="exampleRadios" id={index}/>
-            <label className="form-check-label" htmlFor={index}>
-              {option}
-            </label>
-        </div>
-    )
-  );
+  }
 }

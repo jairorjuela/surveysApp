@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import Home from './Home'
+import Options from './Options'
 
 export default function App() {
+
   return (
-    <main>
-      <Switch>
-        <Route path="/" component={Home} exact />
-      </Switch>
-    </main>
+    <Router>
+      <main>
+        <Switch>
+          <Route exact path="/" component={Options} />
+          <Route path="/surveys" exact component={Home} />
+        </Switch>
+      </main>
+    </Router>
   );
 }

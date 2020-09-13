@@ -45,4 +45,4 @@ This is a public repository.
 
 ## Author
 
-* **Jairo Orjuela**    - *Full stack developer at ProCibernetica* - [Jairo](https://github.com/jairorjuela)
+* **Jairo Orjuela**    - *Full stack developer* - [Jairo](https://github.com/jairorjuela)

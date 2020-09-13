@@ -14,4 +14,8 @@
     <%= render "shared/flash" %>
     <%= yield %>
   </body>
+
+  <script>
+    localStorage.setItem("user", "<%= @current %>");
+  </script>
 </html>

@@ -1,10 +1,10 @@
 module Api
   module V1
     class SurveysController < ApplicationController
+      before_action :set_surveys, only: [:index]
       before_action :authenticate_user!, only: [:create, :update, :destroy]
 
       def index
-        @surveys = Survey.all
         render json: @surveys, each_serializer: SurveySerializer
       end
 
@@ -39,6 +39,15 @@ module Api
       end
 
       private
+      def set_surveys
+        if params[:user].present?
+          user = User.find_by(email: params[:user])
+          @surveys = user.surveys
+        else
+          @surveys = Survey.all
+        end
+      end
+
       def show_params
         params.permit(:id).to_h.symbolize_keys
       end

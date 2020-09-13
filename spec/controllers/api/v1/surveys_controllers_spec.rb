@@ -25,6 +25,7 @@ RSpec.describe Api::V1::SurveysController, :type => :request do
       it "Should return the survey" do
         survey = create(:survey, name: "test")
         question = create(:question, survey: survey)
+        options = create(:option, question: question)
 
         get "/api/v1/surveys/#{survey.id}"
 
@@ -37,7 +38,7 @@ RSpec.describe Api::V1::SurveysController, :type => :request do
           "title"=>"test",
           "questions"=>[
             {"name"=>"Soy una pregunta",
-              "options"=>true
+              "options"=>["Soy una opción"]
             }
           ],
           "owner"=>"batman@justiceleague.com"
@@ -85,10 +86,10 @@ RSpec.describe Api::V1::SurveysController, :type => :request do
 
         post "/api/v1/surveys", params: params
 
-        expect(response.headers["Content-Type"]).to eq("text/html; charset=utf-8")
-        expect(response.status).to eq(302)
+        expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
+        expect(response.status).to eq(401)
 
-        expected_response = "Debe registrarse o iniciar sesión"
+        expected_response = nil
         expect(response.request.flash.alert).to eq(expected_response)
       end
     end

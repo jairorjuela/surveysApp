@@ -16,8 +16,33 @@ RSpec.describe Surveys::Destroy::Do do
 
     context "When the input is valid" do
       it "Should return a success response" do
-      pp response
-        #expect(response.success?).to be_truthy
+        expect(response.success?).to be_truthy
+        expect(Survey.count).to eq(0)
+        expect(Question.count).to eq(0)
+        expect(Option.count).to eq(0)
+      end
+    end
+
+    context "When the input is invalid" do
+      it "Should return a failure response" do
+        input[:id] = { id: 4 }
+
+        expect(response).to be_failure
+        expect(Survey.count).to eq(1)
+        expect(Question.count).to eq(2)
+        expect(Option.count).to eq(4)
+        expect(response.failure).to eq({:id=>["must be String"]})
+      end
+    end
+
+    context "When the input is invalid" do
+      it "Should return a failure response" do
+        input[:id] = { id: "4" }
+
+        expect(response).to be_failure
+        expect(Survey.count).to eq(1)
+        expect(Question.count).to eq(2)
+        expect(Option.count).to eq(4)
       end
     end
   end

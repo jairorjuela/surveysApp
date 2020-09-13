@@ -14,8 +14,8 @@ RSpec.describe Api::V1::ApplicationsController, :type => :request do
           id: survey.id.to_s,
           answers: [
             {
-              question: "Test",
-              answer: ["One"]
+              name: "Test",
+              options: ["One"]
             }
           ],
           owner: "test@mail.com",

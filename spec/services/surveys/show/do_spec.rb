@@ -16,8 +16,40 @@ RSpec.describe Surveys::Show::Do do
 
     context "When the input is valid" do
       it "Should return a success response" do
-      pp response
-        #expect(response.success?).to be_truthy
+        expected_response = {
+          :title=>"holi",
+          :questions=>[
+            {:name=>"pregunta 1", :options=>["opción 1", "opción 2"]},
+            {:name=>"pregunta 2", :options=>["opción 3", "opción 4"]}
+          ],
+          :owner=>"holi@mail.com"
+        }
+
+        expect(response.success?).to be_truthy
+        expect(response.success).to eq(expected_response)
+      end
+    end
+
+    context "When the input is invalid" do
+      it "Should return a failure response" do
+        input[:id] = { id: 4 }
+
+        expect(response).to be_failure
+        expect(Survey.count).to eq(1)
+        expect(Question.count).to eq(2)
+        expect(Option.count).to eq(4)
+        expect(response.failure).to eq({:id=>["must be String"]})
+      end
+    end
+
+    context "When the input is invalid" do
+      it "Should return a failure response" do
+        input[:id] = { id: "4" }
+
+        expect(response).to be_failure
+        expect(Survey.count).to eq(1)
+        expect(Question.count).to eq(2)
+        expect(Option.count).to eq(4)
       end
     end
   end

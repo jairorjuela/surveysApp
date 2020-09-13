@@ -25,8 +25,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## DB Structury Diagram
 
-  Structury Diagram: 
-  ![DbStructury](https://drive.google.com/file/d/1LsZb18QBtS1J3LGdq-ECri9f469m_G1M/view?usp=sharing "DB Structury")
+  Structury Diagram:
+
+  ![DbStructury](https://i.postimg.cc/prZPrRnm/Question.png)
 
 ## DB Postman Doc
 

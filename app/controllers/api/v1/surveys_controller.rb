@@ -1,6 +1,7 @@
 module Api
   module V1
     class SurveysController < ApplicationController
+      acts_as_token_authentication_handler_for User, only: [:create, :update, :destroy]
       before_action :set_surveys, only: [:index]
       before_action :authenticate_user!, only: [:create, :update, :destroy]
 

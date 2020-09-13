@@ -42,6 +42,7 @@ gem 'bootstrap', '~> 4.5', '>= 4.5.2'
 gem 'jquery-rails'
 gem 'devise'
 gem 'active_model_serializers', '~> 0.10.0'
+gem "simple_token_authentication"
 
 #Add DRYGEMS
 gem 'dry-auto_inject'

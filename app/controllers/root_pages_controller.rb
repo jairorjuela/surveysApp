@@ -3,5 +3,6 @@ class RootPagesController < ApplicationController
   end
 
   def manage_surveys
+    @current = current_user.email
   end
 end

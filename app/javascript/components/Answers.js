@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom';
 import axios from 'axios'
-import Select from "react-select";
 import FormAnswer from "./FormAnswer";
 
 export default function Answers(props) {
